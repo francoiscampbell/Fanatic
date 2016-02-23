@@ -1,3 +1,7 @@
 <resources>
-    <string name="app_name">Fanatic</string>
+    <string name="app_name">FpvTest</string>
+    <string name="rotation">Rotation</string>
+    <string name="throttle">Throttle</string>
+    <string name="use_orientation">Use orientation</string>
+    <string name="use_rotation_and_throttle">Use rotation and throttle</string>
 </resources>
