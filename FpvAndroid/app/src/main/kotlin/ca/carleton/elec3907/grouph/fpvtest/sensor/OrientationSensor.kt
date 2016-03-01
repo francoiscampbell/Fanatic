@@ -32,7 +32,7 @@ class OrientationSensor() {
                     .observeOn(AndroidSchedulers.mainThread());
             val compassSub = compass.subscribe()
 
-            return Observable.zip(accel, compass, { accel, compass ->
+            return Observable.zip(accel, compass) { accel, compass ->
                 val rotationMatrix = FloatArray(9)
                 SensorManager.getRotationMatrix(rotationMatrix, null, accel.sensorEvent.values, compass.sensorEvent.values)
 
@@ -45,7 +45,7 @@ class OrientationSensor() {
                 val orientation = FloatArray(3)
                 SensorManager.getOrientation(rotationMatrixRemapped, orientation)
                 return@zip orientation
-            })
+            }
                     .map { values -> Orientation(values[0], values[1], values[2]) }
                     .doOnUnsubscribe {
                         accelSub.unsubscribe()

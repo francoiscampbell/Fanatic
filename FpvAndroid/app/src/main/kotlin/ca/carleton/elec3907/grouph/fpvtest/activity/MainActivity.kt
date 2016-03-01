@@ -49,11 +49,12 @@ class MainActivity : AppCompatActivity(), OnFragmentInteractionListener {
     override fun sendToNetwork(data: ByteArray) {
         if (!socket.isConnected) {
             socket.connect(InetAddress.getByName("192.168.4.1"), 3907)
+
         }
         socket.send(DatagramPacket(data, data.size))
     }
 
-    override fun onError(t: Throwable) {
+     override fun onError(t: Throwable) {
         Log.e(TAG, "Error", t)
         socket.disconnect()
     }
