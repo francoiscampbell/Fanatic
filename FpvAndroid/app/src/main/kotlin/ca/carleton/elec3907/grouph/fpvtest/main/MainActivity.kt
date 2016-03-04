@@ -1,25 +1,21 @@
-package ca.carleton.elec3907.grouph.fpvtest.activity
+package ca.carleton.elec3907.grouph.fpvtest.main
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
 import android.widget.Button
 import ca.carleton.elec3907.grouph.fpvtest.R
+import ca.carleton.elec3907.grouph.fpvtest.ext.loge
 import ca.carleton.elec3907.grouph.fpvtest.fragment.OrientationFragment
 import ca.carleton.elec3907.grouph.fpvtest.fragment.SeekBarFragment
-import java.net.DatagramPacket
-import java.net.DatagramSocket
-import java.net.InetAddress
 
-class MainActivity : AppCompatActivity(), OnFragmentInteractionListener {
-    companion object {
-        private val TAG = "MainActivity"
-    }
+class MainActivity : AppCompatActivity(), MainView, OnFragmentInteractionListener {
+
+    private val presenter = MainPresenterImpl()
 
     private val btnUseOrientation by lazy { findViewById(R.id.btnUseOrientation) as Button }
     private val btnUseSeekBar by lazy { findViewById(R.id.btnUseSeekBar) as Button }
 
-    private lateinit var socket: DatagramSocket
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,8 +24,7 @@ class MainActivity : AppCompatActivity(), OnFragmentInteractionListener {
 
     override fun onStart() {
         super.onStart()
-
-        socket = DatagramSocket()
+        presenter.onStart(this)
 
         btnUseOrientation.setOnClickListener {
             supportFragmentManager!!
@@ -47,25 +42,17 @@ class MainActivity : AppCompatActivity(), OnFragmentInteractionListener {
     }
 
     override fun sendToNetwork(data: ByteArray) {
-        if (!socket.isConnected) {
-            socket.connect(InetAddress.getByName("192.168.4.1"), 3907)
-
-        }
-        socket.send(DatagramPacket(data, data.size))
+        presenter.sendToNetwork(data)
     }
 
      override fun onError(t: Throwable) {
-        Log.e(TAG, "Error", t)
-        socket.disconnect()
+         loge("Error", t)
     }
 
     override fun onStop() {
         super.onStop()
-        Thread {
-            socket.disconnect()
-        }.start()
+        presenter.onStop()
     }
-
 }
 
 interface OnFragmentInteractionListener {

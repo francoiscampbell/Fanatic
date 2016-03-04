@@ -1,4 +1,4 @@
-update=Tuesday, March 01, 2016 'amt' 11:16:35 am
+update=Tuesday, March 01, 2016 'amt' 11:23:59 am
 version=1
 last_client=kicad
 [pcbnew]
@@ -23,9 +23,11 @@ ModuleOutlineThickness=0.150000000000
 [cvpcb]
 version=1
 NetIExt=net
+[general]
+version=1
 [eeschema]
 version=1
-LibDir=
+LibDir=/Users/francois/GoogleDrive/Electronics/KiCad/converted-eagle-libs
 [eeschema/libraries]
 LibName1=power
 LibName2=device
@@ -56,5 +58,8 @@ LibName26=opto
 LibName27=atmel
 LibName28=contrib
 LibName29=valves
-[general]
-version=1
+LibName30=analog_devices
+LibName31=analog_devices_gaui
+LibName32=analog-devices-dds
+LibName33=analog-devices
+LibName34=analog-devices2

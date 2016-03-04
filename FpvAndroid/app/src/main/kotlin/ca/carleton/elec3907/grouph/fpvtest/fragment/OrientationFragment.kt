@@ -9,7 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import ca.carleton.elec3907.grouph.fpvtest.R
-import ca.carleton.elec3907.grouph.fpvtest.activity.OnFragmentInteractionListener
+import ca.carleton.elec3907.grouph.fpvtest.main.OnFragmentInteractionListener
 import ca.carleton.elec3907.grouph.fpvtest.sensor.OrientationSensor
 import rx.Subscription
 import rx.android.schedulers.AndroidSchedulers
