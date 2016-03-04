@@ -8,7 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.SeekBar
 import ca.carleton.elec3907.grouph.fpvtest.R
-import ca.carleton.elec3907.grouph.fpvtest.activity.OnFragmentInteractionListener
+import ca.carleton.elec3907.grouph.fpvtest.main.OnFragmentInteractionListener
 import ca.carleton.elec3907.grouph.fpvtest.widget.OnSeekBarProgressChangeListener
 import ca.carleton.elec3907.grouph.fpvtest.widget.SeekBarListeners
 import ca.carleton.elec3907.grouph.fpvtest.widget.SeekBarSnapHelper
@@ -34,8 +34,6 @@ class SeekBarFragment : Fragment() {
     private lateinit var networkSub: Subscription
 
     companion object {
-        val TAG = "SeekBarFragment"
-
         fun newInstance(args: Bundle): SeekBarFragment {
             val frag = SeekBarFragment()
             frag.arguments = args
