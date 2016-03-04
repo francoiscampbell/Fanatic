@@ -5,8 +5,8 @@ import android.support.v7.app.AppCompatActivity
 import android.widget.Button
 import ca.carleton.elec3907.grouph.fpvtest.R
 import ca.carleton.elec3907.grouph.fpvtest.ext.loge
-import ca.carleton.elec3907.grouph.fpvtest.fragment.OrientationFragment
-import ca.carleton.elec3907.grouph.fpvtest.fragment.SeekBarFragment
+import ca.carleton.elec3907.grouph.fpvtest.main.fragment.OrientationFragment
+import ca.carleton.elec3907.grouph.fpvtest.main.fragment.SeekBarFragment
 
 class MainActivity : AppCompatActivity(), MainView, OnFragmentInteractionListener {
 

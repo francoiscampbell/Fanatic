@@ -1,4 +1,4 @@
-package ca.carleton.elec3907.grouph.fpvtest.fragment
+package ca.carleton.elec3907.grouph.fpvtest.ext
 
 import android.support.v4.app.Fragment
 
