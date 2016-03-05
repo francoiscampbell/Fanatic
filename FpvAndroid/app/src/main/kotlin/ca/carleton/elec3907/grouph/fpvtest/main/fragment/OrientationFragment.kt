@@ -21,7 +21,7 @@ import java.util.concurrent.TimeUnit
  * Created by francois on 16-02-20.
  */
 class OrientationFragment : Fragment() {
-    private val presenter = OrientationPresenterImpl()
+    private val presenter = OrientationPresenterImpl() //inject this as singleton
 
     private val txtRotation by lazy { findViewById(R.id.txtRotation) as TextView }
     private val txtX by lazy { findViewById(R.id.txtX) as TextView }

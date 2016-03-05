@@ -8,7 +8,7 @@ import java.util.*
  */
 class SeekBarMultiListeners(private val seekBar: SeekBar) : SeekBar.OnSeekBarChangeListener {
     val onProgressChangedListeners = HashSet<OnSeekBarProgressChangeListener>()
-    val onReleasdListeners = HashSet<OnSeekBarReleasedListener>()
+    val onReleasedListeners = HashSet<OnSeekBarReleasedListener>()
 
     init {
         seekBar.setOnSeekBarChangeListener(this)
@@ -22,7 +22,7 @@ class SeekBarMultiListeners(private val seekBar: SeekBar) : SeekBar.OnSeekBarCha
     }
 
     override fun onStopTrackingTouch(p0: SeekBar) {
-        onReleasdListeners.forEach { it.onSeekBarReleased(p0, p0.progress) }
+        onReleasedListeners.forEach { it.onSeekBarReleased(p0, p0.progress) }
     }
 
     fun unregister() {

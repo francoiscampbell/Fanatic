@@ -10,7 +10,7 @@ import ca.carleton.elec3907.grouph.fpvtest.main.fragment.SeekBarFragment
 
 class MainActivity : AppCompatActivity(), MainView, OnFragmentInteractionListener {
 
-    private val presenter = MainPresenterImpl()
+    private val presenter = MainPresenterImpl() //inject this as singleton
 
     private val btnUseOrientation by lazy { findViewById(R.id.btnUseOrientation) as Button }
     private val btnUseSeekBar by lazy { findViewById(R.id.btnUseSeekBar) as Button }

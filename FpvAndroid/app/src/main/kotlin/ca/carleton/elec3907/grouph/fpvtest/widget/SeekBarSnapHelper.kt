@@ -8,7 +8,7 @@ import java.util.*
  */
 class SeekBarSnapHelper(private val seekBarMultiListeners: SeekBarMultiListeners) : OnSeekBarReleasedListener {
     init {
-        seekBarMultiListeners.onReleasdListeners += this
+        seekBarMultiListeners.onReleasedListeners += this
     }
 
     val snapPositions = LinkedHashSet<Int>()
@@ -27,7 +27,7 @@ class SeekBarSnapHelper(private val seekBarMultiListeners: SeekBarMultiListeners
     }
 
     fun unregister() {
-        seekBarMultiListeners.onReleasdListeners -= this
+        seekBarMultiListeners.onReleasedListeners -= this
     }
 }
 
