@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="VEHICLE_IP">192.168.0.10</string>
+    <integer name="VEHICLE_PORT">3907</integer>
+</resources>
