@@ -5,11 +5,12 @@ import ca.carleton.elec3907.grouph.fpvtest.net.UdpRemoteDevice
 /**
  * Created by francois on 16-03-04.
  */
-class MainPresenterImpl : MainPresenter() {
-    private val vehicle = UdpRemoteDevice("192.168.4.1", 3907)
+class MainPresenterImpl : MainPresenter {
+    protected lateinit var view: MainView
+    private val vehicle = UdpRemoteDevice("192.168.4.1", 3907) //inject this
 
     override fun onStart(view: MainView) {
-        super.onStart(view)
+        this.view = view
         vehicle.connect()
     }
 

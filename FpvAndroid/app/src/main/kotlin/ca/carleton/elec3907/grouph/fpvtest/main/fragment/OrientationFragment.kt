@@ -4,14 +4,12 @@ import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
-import android.view.Surface
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import ca.carleton.elec3907.grouph.fpvtest.R
 import ca.carleton.elec3907.grouph.fpvtest.ext.findViewById
 import ca.carleton.elec3907.grouph.fpvtest.main.OnFragmentInteractionListener
-import ca.carleton.elec3907.grouph.fpvtest.sensor.OrientationSensor
 import rx.Subscription
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
@@ -23,6 +21,8 @@ import java.util.concurrent.TimeUnit
  * Created by francois on 16-02-20.
  */
 class OrientationFragment : Fragment() {
+    private val presenter = OrientationPresenterImpl()
+
     private val txtRotation by lazy { findViewById(R.id.txtRotation) as TextView }
     private val txtX by lazy { findViewById(R.id.txtX) as TextView }
     private val txtY by lazy { findViewById(R.id.txtY) as TextView }
@@ -59,16 +59,13 @@ class OrientationFragment : Fragment() {
         super.onStart()
 
         val rotation = activity.windowManager.defaultDisplay.rotation
-        txtRotation.text = when (rotation) {
-            Surface.ROTATION_0 -> "ROTATION_0"
-            Surface.ROTATION_90 -> "ROTATION_90"
-            Surface.ROTATION_180 -> "ROTATION_180"
-            Surface.ROTATION_270 -> "ROTATION_270"
-            else -> "Unknown rotation"
-        }
+        txtRotation.text = presenter.getRotationText(rotation)
 
-        val orientation = OrientationSensor.getOrientation(activity.applicationContext, rotation)
+        val orientation = presenter.getOrientation(activity.application, rotation)
 
+        //move rx stuff to presenter
+
+        //make presenter call method on view to set text
         uiSub = orientation
                 .observeOn(AndroidSchedulers.mainThread())
                 .onBackpressureDrop()
