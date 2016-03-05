@@ -8,9 +8,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.SeekBar
 import ca.carleton.elec3907.grouph.fpvtest.R
+import ca.carleton.elec3907.grouph.fpvtest.ext.findViewById
 import ca.carleton.elec3907.grouph.fpvtest.main.OnFragmentInteractionListener
 import ca.carleton.elec3907.grouph.fpvtest.widget.OnSeekBarProgressChangeListener
-import ca.carleton.elec3907.grouph.fpvtest.widget.SeekBarListeners
+import ca.carleton.elec3907.grouph.fpvtest.widget.SeekBarMultiListeners
 import ca.carleton.elec3907.grouph.fpvtest.widget.SeekBarSnapHelper
 import rx.Observable
 import rx.Subscription
@@ -59,7 +60,7 @@ class SeekBarFragment : Fragment() {
         super.onStart()
 
         rotationSeekBar.max = 100
-        val rotationListeners = SeekBarListeners(rotationSeekBar)
+        val rotationListeners = SeekBarMultiListeners(rotationSeekBar)
         val rotationSnapHelper = SeekBarSnapHelper(rotationListeners)
         rotationSnapHelper.addSnapPoint(50)
         rotationListeners.onProgressChangedListeners += object : OnSeekBarProgressChangeListener {
@@ -69,7 +70,7 @@ class SeekBarFragment : Fragment() {
         }
 
         throttleSeekBar.max = 100
-        val throttleListeners = SeekBarListeners(throttleSeekBar)
+        val throttleListeners = SeekBarMultiListeners(throttleSeekBar)
         val throttleSnapHelper = SeekBarSnapHelper(throttleListeners)
         throttleSnapHelper.addSnapPoint(0)
         throttleSnapHelper.addSnapPoint(10) //brake

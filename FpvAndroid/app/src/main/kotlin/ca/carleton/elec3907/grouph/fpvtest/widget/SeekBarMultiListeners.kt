@@ -6,7 +6,7 @@ import java.util.*
 /**
  * Created by francois on 16-02-20.
  */
-class SeekBarListeners(private val seekBar: SeekBar) : SeekBar.OnSeekBarChangeListener {
+class SeekBarMultiListeners(private val seekBar: SeekBar) : SeekBar.OnSeekBarChangeListener {
     val onProgressChangedListeners = HashSet<OnSeekBarProgressChangeListener>()
     val onReleasdListeners = HashSet<OnSeekBarReleasedListener>()
 

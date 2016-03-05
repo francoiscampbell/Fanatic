@@ -6,9 +6,9 @@ import java.util.*
 /**
  * Created by francois on 16-02-20.
  */
-class SeekBarSnapHelper(private val seekBarListeners: SeekBarListeners) : OnSeekBarReleasedListener {
+class SeekBarSnapHelper(private val seekBarMultiListeners: SeekBarMultiListeners) : OnSeekBarReleasedListener {
     init {
-        seekBarListeners.onReleasdListeners += this
+        seekBarMultiListeners.onReleasdListeners += this
     }
 
     val snapPositions = LinkedHashSet<Int>()
@@ -27,7 +27,7 @@ class SeekBarSnapHelper(private val seekBarListeners: SeekBarListeners) : OnSeek
     }
 
     fun unregister() {
-        seekBarListeners.onReleasdListeners -= this
+        seekBarMultiListeners.onReleasdListeners -= this
     }
 }
 
