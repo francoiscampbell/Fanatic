@@ -5,4 +5,5 @@ package ca.carleton.elec3907.grouph.fpvtest.abs
  */
 interface Presenter <in T> {
     fun onStart(view: T)
+    fun onStop()
 }

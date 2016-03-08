@@ -5,7 +5,7 @@ import ca.carleton.elec3907.grouph.fpvtest.abs.Presenter
 /**
  * Created by francois on 16-03-04.
  */
-interface MainPresenter : Presenter<MainView> {
+interface CommonPresenter<T> : Presenter<T> {
     fun sendToNetwork(data: ByteArray)
-    fun onStop()
+    fun onError(t: Throwable)
 }

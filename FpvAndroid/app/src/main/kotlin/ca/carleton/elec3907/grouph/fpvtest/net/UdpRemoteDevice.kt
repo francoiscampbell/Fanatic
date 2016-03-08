@@ -14,18 +14,19 @@ class UdpRemoteDevice(addr: String, port: Int) : RemoteDevice(addr, port) {
     private val socket = DatagramSocket()
 
     private val handlerThread = HandlerThread("UDP send loop")
-    private val handler: Handler
-
-    init {
-        handlerThread.start()
-        handler = Handler(handlerThread.looper)
-    }
+    private lateinit var handler: Handler
 
     override fun connect() {
+        handlerThread.start()
+        handler = Handler(handlerThread.looper)
         handler.post { socket.connect(InetAddress.getByName(addr), port) }
     }
 
     override fun send(data: ByteArray) {
+        if (!handlerThread.isAlive) {
+            throw IllegalStateException("connect() must be called before send()")
+        }
+
         handler.post {
             try {
                 socket.send(DatagramPacket(data, data.size))
@@ -39,5 +40,6 @@ class UdpRemoteDevice(addr: String, port: Int) : RemoteDevice(addr, port) {
 
     override fun disconnect() {
         handler.post { socket.disconnect() }
+        handlerThread.quitSafely()
     }
 }

@@ -6,17 +6,16 @@ import java.util.*
 /**
  * Created by francois on 16-02-20.
  */
-class SeekBarSnapHelper(private val seekBarMultiListeners: SeekBarMultiListeners) : OnSeekBarReleasedListener {
+class SeekBarSnapHelper(private val seekBarMultiListeners: SeekBarMultiListeners) {
+    private val onReleased = { seekBar: SeekBar, progress: Int ->
+        seekBar.progress = snapPositions.findNearest(progress)
+    }
+
     init {
-        seekBarMultiListeners.onReleasedListeners += this
+        seekBarMultiListeners.onReleasedListeners += onReleased
     }
 
     val snapPositions = LinkedHashSet<Int>()
-
-    override fun onSeekBarReleased(seekBar: SeekBar, progress: Int) {
-        val snappedProgress = snapPositions.findNearest(progress)
-        seekBar.progress = snappedProgress
-    }
 
     fun addSnapPoint(snapPoint: Int) {
         snapPositions += snapPoint
@@ -27,7 +26,7 @@ class SeekBarSnapHelper(private val seekBarMultiListeners: SeekBarMultiListeners
     }
 
     fun unregister() {
-        seekBarMultiListeners.onReleasedListeners -= this
+        seekBarMultiListeners.onReleasedListeners -= onReleased
     }
 }
 

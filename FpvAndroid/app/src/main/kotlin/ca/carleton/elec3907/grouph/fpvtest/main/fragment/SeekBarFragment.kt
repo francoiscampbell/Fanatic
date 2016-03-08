@@ -9,30 +9,20 @@ import android.view.ViewGroup
 import android.widget.SeekBar
 import ca.carleton.elec3907.grouph.fpvtest.R
 import ca.carleton.elec3907.grouph.fpvtest.ext.findViewById
-import ca.carleton.elec3907.grouph.fpvtest.main.OnFragmentInteractionListener
-import ca.carleton.elec3907.grouph.fpvtest.widget.OnSeekBarProgressChangeListener
 import ca.carleton.elec3907.grouph.fpvtest.widget.SeekBarMultiListeners
 import ca.carleton.elec3907.grouph.fpvtest.widget.SeekBarSnapHelper
-import rx.Observable
-import rx.Subscription
-import rx.schedulers.Schedulers
-import java.nio.ByteBuffer
-import java.nio.ByteOrder
-import java.util.concurrent.TimeUnit
 
 /**
  * Created by francois on 16-02-20.
  */
-class SeekBarFragment : Fragment() {
+class SeekBarFragment : Fragment(), SeekBarView {
+    private val presenter = SeekBarPresenterImpl()
+
     private val rotationSeekBar by lazy { findViewById(R.id.rotation) as SeekBar }
     private val throttleSeekBar by lazy { findViewById(R.id.throttle) as SeekBar }
 
-    private var rotation = 0
-    private var throttle = 0
-
-    private lateinit var onFragmentInteractionListener: OnFragmentInteractionListener
-
-    private lateinit var networkSub: Subscription
+    override var rotation = 0
+    override var throttle = 0
 
     companion object {
         fun newInstance(args: Bundle): SeekBarFragment {
@@ -44,12 +34,6 @@ class SeekBarFragment : Fragment() {
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
-
-        if (context !is OnFragmentInteractionListener) {
-            throw IllegalArgumentException("$context must implement OnFragmentInteractionListener")
-        }
-
-        onFragmentInteractionListener = context
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -59,14 +43,14 @@ class SeekBarFragment : Fragment() {
     override fun onStart() {
         super.onStart()
 
+        presenter.onStart(this)
+
         rotationSeekBar.max = 100
         val rotationListeners = SeekBarMultiListeners(rotationSeekBar)
         val rotationSnapHelper = SeekBarSnapHelper(rotationListeners)
         rotationSnapHelper.addSnapPoint(50)
-        rotationListeners.onProgressChangedListeners += object : OnSeekBarProgressChangeListener {
-            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-                rotation = progress
-            }
+        rotationListeners.onProgressChangedListeners += { seekBar, progress, fromUser ->
+            rotation = progress
         }
 
         throttleSeekBar.max = 100
@@ -77,29 +61,15 @@ class SeekBarFragment : Fragment() {
         throttleSnapHelper.addSnapPoint(40) //1st speed
         throttleSnapHelper.addSnapPoint(70) //2nd speed
         throttleSnapHelper.addSnapPoint(100) //3rd speed
-        throttleListeners.onProgressChangedListeners += object : OnSeekBarProgressChangeListener {
-            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-                throttle = progress
-            }
+        throttleListeners.onProgressChangedListeners += { seekBar, progress, fromUser ->
+            throttle = progress
         }
 
-        networkSub = Observable.interval(100L, TimeUnit.MILLISECONDS, Schedulers.io())
-                .subscribe ({
-                    val buffer = ByteBuffer.allocate(11)
-                            .order(ByteOrder.LITTLE_ENDIAN)
-                            .put('R'.toByte()) //rotation
-                            .put((if (rotation <= 50) 'L' else 'R').toByte())
-                            .putInt(Math.abs(rotation - 50))
-                            .put('T'.toByte()) //throttle
-                            .putInt(throttle)
-                    onFragmentInteractionListener.sendToNetwork(buffer.array())
-                }, { throwable ->
-                    onFragmentInteractionListener.onError(throwable)
-                })
+        presenter.startSeekBarListener()
     }
 
     override fun onStop() {
         super.onStop()
-        networkSub.unsubscribe()
+        presenter.onStop()
     }
 }
