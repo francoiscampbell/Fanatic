@@ -22,6 +22,23 @@ class OrientationFragment : Fragment(), OrientationView {
     private val txtY by lazy { findViewById(R.id.txtY) as TextView }
     private val txtZ by lazy { findViewById(R.id.txtZ) as TextView }
 
+    override var setTextX: CharSequence
+        get() = txtX.text
+        set(value) {
+            txtX.text = value
+        }
+
+    override var setTextY: CharSequence
+        get() = txtY.text
+        set(value) {
+            txtY.text = value
+        }
+    override var setTextZ: CharSequence
+        get() = txtZ.text
+        set(value) {
+            txtY.text = value
+        }
+
     companion object {
         fun newInstance(args: Bundle): OrientationFragment {
             val frag = OrientationFragment()
@@ -47,17 +64,5 @@ class OrientationFragment : Fragment(), OrientationView {
 
     override fun onStop() {
         super.onStop()
-    }
-
-    override fun setTextX(text: String) {
-        txtX.text = text
-    }
-
-    override fun setTextY(text: String) {
-        txtY.text = text
-    }
-
-    override fun setTextZ(text: String) {
-        txtZ.text = text
     }
 }
