@@ -24,10 +24,6 @@ class SeekBarMultiListeners(private val seekBar: SeekBar) : SeekBar.OnSeekBarCha
     override fun onStopTrackingTouch(p0: SeekBar) {
         onReleasedListeners.forEach { it(p0, p0.progress) }
     }
-
-    fun unregister() {
-        seekBar.setOnSeekBarChangeListener(null)
-    }
 }
 
 

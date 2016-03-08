@@ -20,14 +20,6 @@ class SeekBarSnapHelper(private val seekBarMultiListeners: SeekBarMultiListeners
     fun addSnapPoint(snapPoint: Int) {
         snapPositions += snapPoint
     }
-
-    fun removeSnapPoint(snapPoint: Int) {
-        snapPositions -= snapPoint
-    }
-
-    fun unregister() {
-        seekBarMultiListeners.onReleasedListeners -= onReleased
-    }
 }
 
 fun Set<Int>.findNearest(target: Int): Int {
