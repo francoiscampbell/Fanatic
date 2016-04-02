@@ -31,9 +31,9 @@ class OrientationPresenterImpl : OrientationPresenter() {
                 .observeOn(AndroidSchedulers.mainThread())
                 .onBackpressureDrop()
                 .subscribe { orientation ->
-                    view?.setTextX(orientation.x.toString())
-                    view?.setTextY(orientation.y.toString())
-                    view?.setTextZ(orientation.z.toString())
+                    view?.textX = orientation.x.toString()
+                    view?.textY = orientation.y.toString()
+                    view?.textZ = orientation.z.toString()
                 }
 
         networkSub = orientation
