@@ -3,8 +3,6 @@ package ca.carleton.elec3907.grouph.fpvtest.main.fragment
 import rx.Observable
 import rx.Subscription
 import rx.schedulers.Schedulers
-import java.nio.ByteBuffer
-import java.nio.ByteOrder
 import java.util.concurrent.TimeUnit
 
 /**
@@ -23,14 +21,7 @@ class SeekBarPresenterImpl : SeekBarPresenter() {
     override fun startSeekBarListener() {
         networkSub = Observable.interval(100L, TimeUnit.MILLISECONDS, Schedulers.io())
                 .subscribe ({
-                    val buffer = ByteBuffer.allocate(11)
-                            .order(ByteOrder.LITTLE_ENDIAN)
-                            .put('R'.toByte()) //rotation
-                            .put((if (view!!.rotation <= 50) 'L' else 'R').toByte())
-                            .putInt(Math.abs(view!!.rotation - 50))
-                            .put('T'.toByte()) //throttle
-                            .putInt(view!!.throttle)
-                    sendToNetwork(buffer.array())
+                    sendToNetwork(byteArrayOf((view!!.rotation * 1.8).toByte(), (view!!.throttle * 2.55).toByte()))
                 }, { throwable ->
                     onError(throwable)
                 })

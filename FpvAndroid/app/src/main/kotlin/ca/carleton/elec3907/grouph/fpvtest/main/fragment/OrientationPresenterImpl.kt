@@ -6,8 +6,6 @@ import ca.carleton.elec3907.grouph.fpvtest.sensor.OrientationSensor
 import rx.Subscription
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
-import java.nio.ByteBuffer
-import java.nio.ByteOrder
 import java.util.concurrent.TimeUnit
 
 /**
@@ -24,8 +22,8 @@ class OrientationPresenterImpl : OrientationPresenter() {
         this.view = view
     }
 
-    override fun startOrientationListener(application: Application, rotation: Int) {
-        val orientation = OrientationSensor.getOrientation(application, rotation)
+    override fun startOrientationListener(application: Application, screenRotation: Int) {
+        val orientation = OrientationSensor.getOrientation(application, screenRotation).publish()
 
         uiSub = orientation
                 .observeOn(AndroidSchedulers.mainThread())
@@ -40,19 +38,12 @@ class OrientationPresenterImpl : OrientationPresenter() {
                 .observeOn(Schedulers.io())
                 .throttleFirst(100, TimeUnit.MILLISECONDS)
                 .subscribe({ orientation ->
-                    val Throttle = CalculateThrottlePower(orientation)
-                    val Rotation = CalculateRotation(orientation)
-                    val buffer = ByteBuffer.allocate(12)
-                            .order(ByteOrder.LITTLE_ENDIAN)
-                            .put('R'.toByte()) //rotation
-                            .put((if (Rotation.toInt() <= 50) 'L' else 'R').toByte())
-                            .putInt(Math.abs(Rotation.toInt() - 50))
-                            .put('T'.toByte()) //throttle
-                            .putInt(Throttle.toInt())
-                    sendToNetwork(buffer.array())
+                    sendToNetwork(byteArrayOf(calculateThrottle(orientation), calculateRotation(orientation)))
                 }, { throwable ->
                     onError(throwable)
                 })
+
+        orientation.connect()
     }
 
     override fun getRotationText(rotation: Int): String = when (rotation) {
@@ -71,14 +62,14 @@ class OrientationPresenterImpl : OrientationPresenter() {
     }
 
     //Convert the coordinates in to magnitude of throttle, or rotation
-    fun CalculateThrottlePower(Orientation: OrientationSensor.Orientation): Double {
-        var Throttlepower: Double = (((((Orientation.x * 1000) * -1) + 1.5) * (2 / 3)) * 100)
-        return Throttlepower
+    fun calculateThrottle(orientation: OrientationSensor.Orientation): Byte {
+        val throttle = ((((orientation.x * 1000) * -1) + 1.5) * (2 / 3)) * 100
+        return Math.min(Math.max(throttle, 0.0), 255.0).toByte()
     }
 
-    fun CalculateRotation(Orientation: OrientationSensor.Orientation): Double {
-        // Calculates Rotation In Degrees (either positive or n
-        var Rotation: Float = ((Orientation.x * 1000) * (1 / 3) * 100) + 50
-        return Rotation.toDouble()
+    // Calculates Rotation In Degrees (either positive or negative)
+    fun calculateRotation(orientation: OrientationSensor.Orientation): Byte {
+        val rotation = (orientation.x * 1000) * (1 / 3) * 100
+        return Math.min(Math.max(rotation, 0f), 255f).toByte()
     }
 }
