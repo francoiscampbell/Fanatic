@@ -61,15 +61,13 @@ void setNewPosition() {
 }
 
 void setRotation(uint8_t rotation) {
-  uint8_t rotationDegrees = rotation * 1.8;
   //TODO
 }
 
 void setThrottle(uint8_t throttle) {
-  uint8_t throttleByte = throttle * 2.55;
   for (uint8_t fanNum = 1; fanNum <= 4; fanNum++) {
-    Adt7470_setFanSpeed(&leftFans, fanNum, throttleByte);
-    Adt7470_setFanSpeed(&rightFans, fanNum, throttleByte);
+    Adt7470_setFanSpeed(&leftFans, fanNum, throttle);
+    Adt7470_setFanSpeed(&rightFans, fanNum, throttle);
   }
 }
 
