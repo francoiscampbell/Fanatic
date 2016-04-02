@@ -1,4 +1,4 @@
-#include "adt7470.h"
+#include "Adt7470.h"
 
 struct Adt7470 adt7470_new(uint8_t dev7BitAddress) {
   struct Adt7470 device = {.dev7BitAddress = dev7BitAddress};

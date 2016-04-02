@@ -1,4 +1,4 @@
-#include "adt7470.h"
+#include "Adt7470.h"
 #include <ESP8266WiFi.h>
 #include <WiFiUdp.h>
 
@@ -55,6 +55,9 @@ void setNewPosition() {
 
   uint8_t rotation = udpRecvBuffer[0];
   uint8_t throttle = udpRecvBuffer[1];
+
+  setRotation(rotation);
+  setThrottle(throttle);
 }
 
 void setRotation(uint8_t rotation) {
