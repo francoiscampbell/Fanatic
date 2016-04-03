@@ -5,21 +5,20 @@
 #include <Servo.h>
 
 //Fans
-struct Adt7470 leftFans = adt7470_new(0x2C);
-struct Adt7470 rightFans = adt7470_new(0x2E);
+Adt7470 leftFans(0x2C);
+Adt7470 rightFans(0x2E);
 
 //Rotation
 Servo rotationServo;
 #define SERVO_PIN 13
 
 //Obstacle detection
-struct Mcp23017 ioExpander = mcp23017_new(0x20);
+Mcp23017 ioExpander(0x20);
 
 //WiFi
 WiFiUDP udp;
 #define PORT 3907
 #define MAX_BUF_SIZE 256
-
 uint8_t udpRecvBuffer[MAX_BUF_SIZE] = {0};
 
 void setup() {
@@ -41,11 +40,11 @@ void loop() {
 void setupFans() {
   stop();
 
-  Adt7470_setLowFrequencyDrive(&leftFans);
-  Adt7470_setLowFrequencyDrive(&rightFans);
+  leftFans.setLowFrequencyDrive();
+  rightFans.setLowFrequencyDrive();
 
-  Adt7470_setDriveFrequencyToFastest(&leftFans);
-  Adt7470_setDriveFrequencyToFastest(&rightFans);
+  leftFans.setDriveFrequencyToFastest();
+  rightFans.setDriveFrequencyToFastest();
 }
 
 void setupRotation() {
@@ -61,7 +60,7 @@ void setupWiFi() {
 
 
 bool checkObstacle() {
-  return (mcp23017_readGpio(&ioExpander, GPIO_A) & 1);
+  return (ioExpander.readGpio(GPIO_A) & 1);
 }
 
 void stop() {
@@ -84,8 +83,8 @@ void setRotation(uint8_t rotation) {
 
 void setThrottle(uint8_t throttle) {
   for (uint8_t fanNum = 1; fanNum <= 4; fanNum++) {
-    Adt7470_setFanSpeed(&leftFans, fanNum, throttle);
-    Adt7470_setFanSpeed(&rightFans, fanNum, throttle);
+    leftFans.setFanSpeed(fanNum, throttle);
+    rightFans.setFanSpeed(fanNum, throttle);
   }
 }
 
