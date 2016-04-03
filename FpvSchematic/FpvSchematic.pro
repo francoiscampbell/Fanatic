@@ -1,4 +1,4 @@
-update=Tuesday, March 01, 2016 'amt' 11:23:59 am
+update=Saturday, April 02, 2016 'pmt' 01:59:19 pm
 version=1
 last_client=kicad
 [pcbnew]
@@ -25,9 +25,20 @@ version=1
 NetIExt=net
 [general]
 version=1
+[schematic_editor]
+version=1
+PageLayoutDescrFile=
+PlotDirectoryName=
+SubpartIdSeparator=0
+SubpartFirstId=65
+NetFmtName=
+SpiceForceRefPrefix=0
+SpiceUseNetNumbers=0
+LabSize=60
+ERC_TestSimilarLabels=1
 [eeschema]
 version=1
-LibDir=/Users/francois/GoogleDrive/Electronics/KiCad/converted-eagle-libs
+LibDir=/Users/francois/GoogleDrive/Electronics/KiCad/converted-eagle-libs;/Users/francois/GoogleDrive/Electronics/KiCad/libs/kicad-ESP8266
 [eeschema/libraries]
 LibName1=power
 LibName2=device
@@ -63,3 +74,4 @@ LibName31=analog_devices_gaui
 LibName32=analog-devices-dds
 LibName33=analog-devices
 LibName34=analog-devices2
+LibName35=ESP8266
