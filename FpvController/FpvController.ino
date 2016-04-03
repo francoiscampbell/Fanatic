@@ -1,19 +1,30 @@
 #include "Adt7470.h"
+#include "Mcp23017.h"
 #include <ESP8266WiFi.h>
 #include <WiFiUdp.h>
+#include <Servo.h>
 
-#define PORT 3907
-#define MAX_BUF_SIZE 256
-
+//Fans
 struct Adt7470 leftFans = adt7470_new(0x2C);
 struct Adt7470 rightFans = adt7470_new(0x2E);
 
+//Rotation
+Servo rotationServo;
+#define SERVO_PIN 13
+
+//Obstacle detection
+struct Mcp23017 ioExpander = mcp23017_new(0x20);
+
+//WiFi
 WiFiUDP udp;
+#define PORT 3907
+#define MAX_BUF_SIZE 256
 
 uint8_t udpRecvBuffer[MAX_BUF_SIZE] = {0};
 
 void setup() {
   setupFans();
+  setupRotation();
   setupWiFi();
 }
 
@@ -37,13 +48,20 @@ void setupFans() {
   Adt7470_setDriveFrequencyToFastest(&rightFans);
 }
 
+void setupRotation() {
+  rotationServo.attach(SERVO_PIN);
+  rotationServo.write(90);
+}
+
+
 void setupWiFi() {
-  WiFi.softAP("FPV");
+  WiFi.softAP("GroupH-FPV");
   udp.begin(PORT);
 }
 
+
 bool checkObstacle() {
-  return false; //TODO
+  return (mcp23017_readGpio(&ioExpander, GPIO_A) & 1);
 }
 
 void stop() {
@@ -51,17 +69,17 @@ void stop() {
 }
 
 void setNewPosition() {
-  udp.read(udpRecvBuffer, udp.available());
-
-  uint8_t rotation = udpRecvBuffer[0];
-  uint8_t throttle = udpRecvBuffer[1];
-
-  setRotation(rotation);
-  setThrottle(throttle);
+  if (udp.read(udpRecvBuffer, udp.available()) >= 2) {
+    uint8_t rotation = udpRecvBuffer[0];
+    uint8_t throttle = udpRecvBuffer[1];
+  
+    setRotation(rotation);
+    setThrottle(throttle);
+  }
 }
 
 void setRotation(uint8_t rotation) {
-  //TODO
+  rotationServo.write(rotation);
 }
 
 void setThrottle(uint8_t throttle) {
