@@ -10,7 +10,7 @@ uint8_t Mcp23017::readGpio(uint8_t gpio) {
 
 void Mcp23017::writeGpio(uint8_t gpio, uint8_t value) {
   if (gpio == GPIO_A || gpio == GPIO_B) {
-    writeDeviceRegister(gpio, &value, 1);
+    writeDeviceRegister(gpio, value);
   }
 }
 

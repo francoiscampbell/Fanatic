@@ -20,20 +20,15 @@ uint8_t I2cRegisterDevice::readDeviceRegister(uint8_t reg) {
   return Wire.read();
 }
 
+void I2cRegisterDevice::writeDeviceRegister(uint8_t reg, uint8_t data) {
+  writeDeviceRegister(reg, &data, 1);
+}
+
 void I2cRegisterDevice::writeDeviceRegister(uint8_t reg, uint8_t* data, uint16_t dataLen) {
   Wire.beginTransmission(address);
   Wire.write(reg);
   Wire.write(data, dataLen);
   Wire.endTransmission();
-}
-
-void I2cRegisterDevice::writeDeviceRegisterBits(uint8_t reg, uint8_t mask, uint8_t value) {
-  uint8_t currentRegValue = readDeviceRegister(reg);
-  uint8_t maskedRegValue = currentRegValue & ~mask;
-
-  uint8_t maskedNewValue = value & mask;
-  uint8_t newRegValue = maskedRegValue | maskedNewValue;
-
-  writeDeviceRegister(reg, &newRegValue, 1);
+  //os_printf("Wrote %x to register %x at device %x\n", data[0], reg, address);
 }
 
