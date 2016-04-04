@@ -1,35 +1,31 @@
 package ca.carleton.elec3907.grouph.fpvtest.main.fragment
 
-import rx.Observable
-import rx.Subscription
-import rx.schedulers.Schedulers
-import java.util.concurrent.TimeUnit
-
 /**
  * Created by francois on 16-03-04.
  */
 class SeekBarPresenterImpl : SeekBarPresenter() {
     private var view: SeekBarView? = null
 
+    override var rotation = 0
+        set(value) {
+            field = value
+            sendRotationAndThrottle()
+        }
+    override var throttle = 0
+        set(value) {
+            field = value
+            sendRotationAndThrottle()
+        }
+
     override fun onStart(view: SeekBarView) {
         super.onStart(view)
         this.view = view
     }
 
-    private lateinit var networkSub: Subscription
-
-    override fun startSeekBarListener() {
-        networkSub = Observable.interval(100L, TimeUnit.MILLISECONDS, Schedulers.io())
-                .subscribe ({
-                    sendToNetwork(byteArrayOf((view!!.rotation * 1.8).toByte(), (view!!.throttle * 2.55).toByte()))
-                }, { throwable ->
-                    onError(throwable)
-                })
-    }
+    private fun sendRotationAndThrottle() = sendToNetwork(byteArrayOf((rotation * 1.8).toByte(), (throttle * 2.55).toByte()))
 
     override fun onStop() {
         super.onStop()
         view = null
-        networkSub.unsubscribe()
     }
 }

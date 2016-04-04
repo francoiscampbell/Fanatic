@@ -21,8 +21,7 @@ class SeekBarFragment : Fragment(), SeekBarView {
     private val rotationSeekBar by lazy { findViewById(R.id.rotation) as SeekBar }
     private val throttleSeekBar by lazy { findViewById(R.id.throttle) as SeekBar }
 
-    override var rotation = 0
-    override var throttle = 0
+
 
     companion object {
         fun newInstance(args: Bundle): SeekBarFragment {
@@ -45,27 +44,23 @@ class SeekBarFragment : Fragment(), SeekBarView {
 
         presenter.onStart(this)
 
-        rotationSeekBar.max = 100
         val rotationListeners = SeekBarMultiListeners(rotationSeekBar)
         val rotationSnapHelper = SeekBarSnapHelper(rotationListeners)
         rotationSnapHelper.addSnapPoint(50)
         rotationListeners.onProgressChangedListeners += { seekBar, progress, fromUser ->
-            rotation = progress
+            presenter.rotation = progress
+
         }
 
-        throttleSeekBar.max = 100
         val throttleListeners = SeekBarMultiListeners(throttleSeekBar)
         val throttleSnapHelper = SeekBarSnapHelper(throttleListeners)
-        throttleSnapHelper.addSnapPoint(0)
-        throttleSnapHelper.addSnapPoint(10) //brake
+        throttleSnapHelper.addSnapPoint(0) //brake
         throttleSnapHelper.addSnapPoint(40) //1st speed
         throttleSnapHelper.addSnapPoint(70) //2nd speed
         throttleSnapHelper.addSnapPoint(100) //3rd speed
         throttleListeners.onProgressChangedListeners += { seekBar, progress, fromUser ->
-            throttle = progress
+            presenter.throttle = progress
         }
-
-        presenter.startSeekBarListener()
     }
 
     override fun onStop() {
