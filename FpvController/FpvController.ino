@@ -14,7 +14,9 @@ Servo rotationServo;
 #define SERVO_PIN 13
 
 //Obstacle detection
-Mcp23017 ioExpander(0x20);
+#define OBSTACLE_FRONT 14
+#define OBSTACLE_BOTTOM 12
+//Mcp23017 ioExpander(0x20);
 
 //WiFi
 #define SSID "GroupH-FPV"
@@ -22,6 +24,9 @@ WiFiUDP udp;
 #define PORT 3907
 #define MAX_BUF_SIZE 256
 uint8_t udpRecvBuffer[MAX_BUF_SIZE] = {0};
+
+bool obstacle = false;
+uint8_t savedThrottle = 0;
 
 void setup() {
   Serial.begin(115200);
@@ -36,12 +41,17 @@ void setup() {
 }
 
 void loop() {
-  if (checkObstacle()) {
-    stop();
-  } else {
-    if (udp.parsePacket()) {
-      setNewPosition();
+  bool oldObstacle = obstacle;
+  obstacle = checkObstacle();
+  if (obstacle) {
+    if (!oldObstacle) {
+      stop();
     }
+  } else {
+    setThrottle(savedThrottle);
+  }
+  if (udp.parsePacket()) {
+    setNewPosition();
   }
 }
 
@@ -64,13 +74,12 @@ void setupWiFi() {
 
 
 bool checkObstacle() {
-  //return (ioExpander.readGpio(GPIO_A) & 1);
-  return false;
+  return !digitalRead(OBSTACLE_FRONT) || digitalRead(OBSTACLE_BOTTOM);
 }
 
 void stop() {
   setThrottle(0);
-  os_printf("Stopped fans\n");
+  //os_printf("Stopped fans\n");
 }
 
 void setNewPosition() {
@@ -80,6 +89,7 @@ void setNewPosition() {
   
     setRotation(rotation);
     setThrottle(throttle);
+    savedThrottle = throttle;
   }
 }
 
@@ -89,10 +99,10 @@ void setRotation(uint8_t rotation) {
 }
 
 void setThrottle(uint8_t throttle) {
+  os_printf("Set throttle to %d\n", throttle);
   for (uint8_t fanNum = 1; fanNum <= 4; fanNum++) {
     leftFans.setFanSpeed(fanNum, throttle);
     rightFans.setFanSpeed(fanNum, throttle);
   }
-  os_printf("Set throttle to %d\n", throttle);
 }
 
