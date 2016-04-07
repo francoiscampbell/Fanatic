@@ -53,11 +53,6 @@ class SeekBarFragment : Fragment(), SeekBarView {
         }
 
         val throttleListeners = SeekBarMultiListeners(throttleSeekBar)
-        val throttleSnapHelper = SeekBarSnapHelper(throttleListeners)
-        throttleSnapHelper.addSnapPoint(0) //brake
-        throttleSnapHelper.addSnapPoint(40) //1st speed
-        throttleSnapHelper.addSnapPoint(70) //2nd speed
-        throttleSnapHelper.addSnapPoint(100) //3rd speed
         throttleListeners.onProgressChangedListeners += { seekBar, progress, fromUser ->
             presenter.throttle = progress
         }

@@ -45,7 +45,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:progress="10"
+            android:progress="0"
             android:rotation="-90"
             android:layout_weight="1" />
     </LinearLayout>
